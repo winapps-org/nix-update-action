@@ -3,6 +3,9 @@
 name: 'nix-update action'
 description: 'A GitHub action that detects and updates flake outputs via nix-update tool'
 inputs:
+  token:
+    description: 'The token that the action will use to create and update the pull request.'
+    default: ${{ github.token }}
   packages:
     description: 'A space-separated list of inputs to update. Leave empty to update all inputs.'
     required: false
@@ -130,6 +133,7 @@ runs:
       id: create-pr
       uses: peter-evans/create-pull-request@v4
       with:
+        token: ${{ inputs.token }}
         branch: ${{ inputs.branch }}
         delete-branch: true
         title: ${{ inputs.pr-title }}
@@ -137,5 +141,3 @@ runs:
         labels: ${{ inputs.pr-labels }}
         reviewers: ${{ inputs.pr-reviewers }}
         body: ${{ inputs.pr-body }}
-
-
