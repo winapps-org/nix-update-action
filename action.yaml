@@ -74,6 +74,10 @@ inputs:
     description: 'GPG Private Key Passphrase for the GPG Private Key with which to sign the commits in the PR to be created'
     required: false
     default: ''
+  extra-args:
+    description: 'Extra arguments to pass to nix-update'
+    required: false
+    default: ''
 outputs:
   pull-request-number:
     description: 'The number of the opened pull request'
@@ -129,6 +133,7 @@ runs:
         GIT_COMMITTER_NAME: ${{ env.GIT_COMMITTER_NAME }}
         GIT_COMMITTER_EMAIL: ${{ env.GIT_COMMITTER_EMAIL }}
         PATH_TO_FLAKE_DIR: ${{ inputs.path-to-flake-dir }}
+        EXTRA_ARGS: ${{ inputs.extra-args }}
     - name: Create PR
       id: create-pr
       uses: peter-evans/create-pull-request@v4
