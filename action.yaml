@@ -85,10 +85,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - uses: yaxitech/nix-install-pkgs-action@v5
-      with:
-        packages: "nix-update,jq"
-        inputs-from: nixpkgs
     - name: Import bot's GPG key for signing commits
       if: ${{ inputs.sign-commits == 'true' }}
       id: import-gpg

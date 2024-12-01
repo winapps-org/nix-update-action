@@ -23,11 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Nix
-        uses: cachix/install-nix-action@v20
+        uses: cachix/install-nix-action@v27
       - name: Update flake packages
-        uses: selfuryon/nix-update-action@v1
+        uses: winapps-org/nix-update-action@v1.3.0
 ```
 
 ### Update specific packages
@@ -45,11 +45,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Nix
-        uses: cachix/install-nix-action@v20
+        uses: cachix/install-nix-action@v27
       - name: Update flake packages
-        uses: selfuryon/nix-update-action@v1
+        uses: winapps-org/nix-update-action@v1.3.0
         with:
           packages: "geth,besu"
 ```
@@ -69,11 +69,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Nix
-        uses: cachix/install-nix-action@v20
+        uses: cachix/install-nix-action@v27
       - name: Update flake packages
-        uses: selfuryon/nix-update-action@v1
+        uses: winapps-org/nix-update-action@v1.3.0
         with:
           blacklist: "teku,lighthouse"
 ```
@@ -93,12 +93,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Nix
-        uses: cachix/install-nix-action@v20
+        uses: cachix/install-nix-action@v27
       - name: Update flake packages
         id: update
-        uses: selfuryon/nix-update-action@v1
+        uses: winapps-org/nix-update-action@v1.3.0
       - name: Print PR number
         run: echo Pull request number is ${{ steps.update.outputs.pull-request-number }}.
 ```
@@ -118,12 +118,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Nix
-        uses: cachix/install-nix-action@v20
+        uses: cachix/install-nix-action@v27
       - name: Update flake packages
         id: update
-        uses: selfuryon/nix-update-action@v1
+        uses: winapps-org/nix-update-action@v1.3.0
         with:
           git-author-name: 'John Author'
           git-author-email: 'github-actions[bot]@users.noreply.github.com'
@@ -156,12 +156,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Nix
-        uses: cachix/install-nix-action@v20
+        uses: cachix/install-nix-action@v27
       - name: Update flake packages
         id: update
-        uses: selfuryon/nix-update-action@v1
+        uses: winapps-org/nix-update-action@v1.3.0
         with:
           sign-commits: true
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
@@ -184,13 +184,40 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Nix
-        uses: cachix/install-nix-action@v20
+        uses: cachix/install-nix-action@v27
       - name: Update flake packages
         id: update
-        uses: selfuryon/nix-update-action@v1
+        uses: winapps-org/nix-update-action@v1.3.0
         with:
           pr-assignees: User1
           pr-reviewers: User2,User3
 ```
+
+### Pass extra arguments directly to nix-update
+
+If extra arguments need to be passed to `nix-update` (like for example `--version=branch`) use `extra-args` like:  
+
+```yaml
+name: "Update Flake Packages ❄️"
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 10 * * 0" # https://crontab.guru/#0_10_*_*_0
+jobs:
+  updateFlakePackages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Nix
+        uses: cachix/install-nix-action@v27
+      - name: Update flake packages
+        id: update
+        uses: winapps-org/nix-update-action@v1.3.0
+        with:
+          extra-args: --version=branch
+```
+
+Note that these arguments will be passed after the default `--flake --commit`, which cannot be overridden.  
