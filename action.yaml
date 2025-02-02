@@ -30,7 +30,7 @@ inputs:
     description: 'The body of the PR to be created'
     required: false
     default: |
-      Automated changes by the [nix-update-actions](https://github.com/selfuryon/nix-update-action) GitHub Action.
+      Automated changes by the [nix-update-actions](https://github.com/winapps-org/nix-update-action) GitHub Action.
   pr-labels:
     description: 'A comma or newline separated list of labels to set on the Pull Request to be created'
     required: false
@@ -78,6 +78,10 @@ inputs:
     description: 'Extra arguments to pass to nix-update'
     required: false
     default: ''
+  skip-pr:
+    description: 'Whether to skip creating the PR and only run the update'
+    required: false
+    default: false
 outputs:
   pull-request-number:
     description: 'The number of the opened pull request'
@@ -133,6 +137,7 @@ runs:
     - name: Create PR
       id: create-pr
       uses: peter-evans/create-pull-request@v7
+      if: ${{ inputs.skip-pr != 'true' }}
       with:
         token: ${{ inputs.token }}
         branch: ${{ inputs.branch }}

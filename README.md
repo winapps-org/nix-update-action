@@ -221,3 +221,7 @@ jobs:
 ```
 
 Note that these arguments will be passed after the default `--flake --commit`, which cannot be overridden.  
+
+### Skipping PR creation
+
+If you only want to test the build on a newer commit, set `skip-pr` to `true`. 
